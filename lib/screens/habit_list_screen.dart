@@ -24,11 +24,7 @@ class _HabitListScreenState extends State<HabitListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Habit Tracker',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.teal,
+        title: const Text('Habit Tracker'),
       ),
       body: Consumer<HabitProvider>(
         builder: (context, habitProvider, child) {
@@ -43,7 +39,6 @@ class _HabitListScreenState extends State<HabitListScreen> {
             itemBuilder: (context, index) {
               final habit = habitProvider.habits[index];
               return Card(
-                color: Colors.teal[50],
                 margin: const EdgeInsets.all(8.0),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -55,7 +50,6 @@ class _HabitListScreenState extends State<HabitListScreen> {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.teal,
                         ),
                       ),
                       Text(habit.description),
@@ -75,11 +69,22 @@ class _HabitListScreenState extends State<HabitListScreen> {
                               );
                             },
                             child: const Text('Edit'),
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.teal,
-                            ),
                           ),
                         ],
+                      ),
+                      FutureBuilder<int>(
+                        future: habitProvider.calculateCurrentStreak(habit.id!),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            final streak = snapshot.data ?? 0;
+                            return Text('Current Streak: $streak days');
+                          }
+                        },
                       ),
                       const Divider(),
                       Row(
@@ -112,7 +117,6 @@ class _HabitListScreenState extends State<HabitListScreen> {
                                             }
                                           : null, // Disable the button
                                       visualDensity: VisualDensity.compact,
-                                      activeColor: Colors.teal,
                                     ),
                                   ],
                                 );
@@ -154,7 +158,6 @@ class _HabitListScreenState extends State<HabitListScreen> {
           );
         },
         child: const Icon(Icons.add),
-        backgroundColor: Colors.teal,
       ),
     );
   }

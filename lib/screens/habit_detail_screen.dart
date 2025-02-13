@@ -65,17 +65,7 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          widget.habit.id == null ? 'Create Habit' : 'Edit Habit',
-          style: const TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.teal,
+        title: Text(widget.habit.id == null ? 'Create Habit' : 'Edit Habit'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -85,13 +75,7 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
             children: <Widget>[
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  labelStyle: TextStyle(color: Colors.teal),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.teal),
-                  ),
-                ),
+                decoration: const InputDecoration(labelText: 'Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a name';
@@ -101,13 +85,7 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
               ),
               TextFormField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Description',
-                  labelStyle: TextStyle(color: Colors.teal),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.teal),
-                  ),
-                ),
+                decoration: const InputDecoration(labelText: 'Description'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a description';
@@ -118,12 +96,7 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
               TextFormField(
                 controller: _frequencyController,
                 decoration: const InputDecoration(
-                  labelText: 'Frequency (times per week)',
-                  labelStyle: TextStyle(color: Colors.teal),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.teal),
-                  ),
-                ),
+                    labelText: 'Frequency (times per week)'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -142,15 +115,9 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: ChoiceChip(
-                      label: Text(
-                        DateFormat('E').format(DateTime(0, 1, index + 1)),
-                        style: TextStyle(
-                          color:
-                              _daysOfWeek[index] ? Colors.white : Colors.teal,
-                        ),
-                      ),
+                      label: Text(DateFormat('E').format(
+                          DateTime(0, 1, index + 1))), // Sun, Mon, Tue, etc.
                       selected: _daysOfWeek[index],
-                      selectedColor: Colors.teal,
                       onSelected: (bool selected) {
                         setState(() {
                           _daysOfWeek[index] = selected;
@@ -164,9 +131,7 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
               Row(
                 children: <Widget>[
                   Text(
-                    'Start Date: ${DateFormat('yyyy-MM-dd').format(_startDate)}',
-                    style: const TextStyle(color: Colors.teal),
-                  ),
+                      'Start Date: ${DateFormat('yyyy-MM-dd').format(_startDate)}'),
                   TextButton(
                     onPressed: () => _selectDate(context, true),
                     child: const Text('Select Date'),
@@ -176,9 +141,7 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
               Row(
                 children: <Widget>[
                   Text(
-                    'End Date: ${_endDate != null ? DateFormat('yyyy-MM-dd').format(_endDate!) : 'None'}',
-                    style: const TextStyle(color: Colors.teal),
-                  ),
+                      'End Date: ${_endDate != null ? DateFormat('yyyy-MM-dd').format(_endDate!) : 'None'}'),
                   TextButton(
                     onPressed: () => _selectDate(context, false),
                     child: const Text('Select Date'),
@@ -209,16 +172,11 @@ class _HabitDetailScreenState extends State<HabitDetailScreen> {
                       Navigator.pop(context);
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
-                  ),
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: const Text('Save'),
                 ),
               ),
-              if (widget.habit.id != null)
+              if (widget.habit.id !=
+                  null) // Only show delete button when editing existing habit
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: ElevatedButton(

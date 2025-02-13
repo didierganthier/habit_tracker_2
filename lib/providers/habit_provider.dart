@@ -59,4 +59,22 @@ class HabitProvider with ChangeNotifier {
   Future<bool> isHabitCompletedToday(int habitId, DateTime date) async {
     return await _dbHelper.isHabitCompletedToday(habitId, date);
   }
+
+  Future<int> calculateCurrentStreak(int habitId) async {
+    int streak = 0;
+    DateTime currentDate = DateTime.now();
+
+    while (true) {
+      final isCompleted =
+          await _dbHelper.isHabitCompletedToday(habitId, currentDate);
+      if (isCompleted) {
+        streak++;
+        currentDate = currentDate.subtract(const Duration(days: 1));
+      } else {
+        break;
+      }
+    }
+
+    return streak;
+  }
 }
