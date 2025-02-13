@@ -1,13 +1,12 @@
-import 'package:habit_tracker_2/models/habit.dart';
-import 'package:habit_tracker_2/models/habit_completion.dart';
-import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import '../models/habit.dart';
+import '../models/habit_completion.dart';
+import 'package:intl/intl.dart';
 
 class DatabaseHelper {
-  static const _databaseName = 'HabitTracker.db';
+  static const _databaseName = "HabitTracker.db";
   static const _databaseVersion = 1;
 
   static const tableHabits = 'habits';
@@ -19,15 +18,14 @@ class DatabaseHelper {
 
   // Only have a single app-wide reference to the database
   static Database? _database;
-
   Future<Database> get database async {
     if (_database != null) return _database!;
-
     // Lazily instantiate the db the first time it is accessed
     _database = await _initDatabase();
     return _database!;
   }
 
+  // This opens the database (and creates it if it doesn't exist)
   _initDatabase() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _databaseName);
@@ -41,25 +39,25 @@ class DatabaseHelper {
   // SQL code to create the database table
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-    CREATE TABLE $tableHabits (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      description TEXT NOT NULL,
-      frequency INTEGER NOT NULL,
-      daysOfWeek TEXT NOT NULL,
-      startDate TEXT NOT NULL,
-      endDate TEXT
-    )
-    ''');
+            CREATE TABLE $tableHabits (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              name TEXT NOT NULL,
+              description TEXT NOT NULL,
+              frequency INTEGER NOT NULL,
+              daysOfWeek TEXT NOT NULL,
+              startDate TEXT NOT NULL,
+              endDate TEXT
+            )
+            ''');
 
     await db.execute('''
-    CREATE TABLE $tableCompletions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      habitId INTEGER NOT NULL,
-      completionDate TEXT NOT NULL,
-      FOREIGN KEY (habitId) REFERENCES $tableHabits(id)
-    )
-    ''');
+            CREATE TABLE $tableCompletions (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              habitId INTEGER NOT NULL,
+              completionDate TEXT NOT NULL,
+              FOREIGN KEY (habitId) REFERENCES $tableHabits(id)
+            )
+            ''');
   }
 
   // Helper methods
@@ -96,11 +94,9 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
-
     if (maps.isNotEmpty) {
       return Habit.fromMap(maps.first.cast<String, dynamic>());
     }
-
     return null;
   }
 
