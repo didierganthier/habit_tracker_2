@@ -69,4 +69,12 @@ class DatabaseHelper {
     final db = await database;
     return await db.insert(tableHabits, habit.toMap());
   }
+
+  Future<List<Habit>> getAllHabits() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(tableHabits);
+    return List.generate(maps.length, (i) {
+      return Habit.fromMap(maps[i]);
+    });
+  }
 }
