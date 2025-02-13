@@ -1,3 +1,4 @@
+import 'package:habit_tracker_2/models/habit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
@@ -36,5 +37,36 @@ class DatabaseHelper {
   }
 
   // SQL code to create the database table
-  Future _onCreate(Database db, int version) async {}
+  Future _onCreate(Database db, int version) async {
+    await db.execute('''
+    CREATE TABLE $tableHabits (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      description TEXT NOT NULL,
+      frequency INTEGER NOT NULL,
+      daysOfWeek TEXT NOT NULL,
+      startDate TEXT NOT NULL,
+      endDate TEXT
+    )
+    ''');
+
+    await db.execute('''
+    CREATE TABLE $tableCompletions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      habitId INTEGER NOT NULL,
+      completionDate TEXT NOT NULL,
+      FOREIGN KEY (habitId) REFERENCES $tableHabits(id)
+    )
+    ''');
+  }
+
+  // Helper methods
+
+  // Inserts a row in the database where each key in the Map is a column name
+  // and the value is the column value. The return value is the id of the
+  // inserted row.
+  Future<int> insertHabit(Habit habit) async {
+    final db = await database;
+    return await db.insert(tableHabits, habit.toMap());
+  }
 }
